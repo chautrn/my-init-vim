@@ -20,17 +20,28 @@ set belloff=all
 " filetype plugin on
 " filetype indent on
 
-map <c-c> "+y
 " select all
 map <c-a> ggVG 
+" copy
+map <c-c> "+y
+
 " go back to previous cursor and center screen
 map <c-o> <c-o>zz
-" Java comment
+
+" java comment
 map <c-j> i/**/<Esc>hi
 map K 5k
 map J 5j
-" Java main function
+
+" java main function
 command JavaMain :r ~/.config/JavaMain.txt
+
+" java compile, run, error cycle
+autocmd Filetype java set makeprg=javac\ %
+set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
+map <F9> :make<Return>:copen<Return>
+map <F10> :cprevious<Return>
+map <F11> :cnext<Return>
 
 " vim split resizing
 nnoremap <C-j> :resize +1<CR>
@@ -38,6 +49,7 @@ nnoremap <C-k> :resize -1<CR>
 nnoremap <C-h> :vertical resize -1<CR>
 nnoremap <C-l> :vertical resize +1<CR>
 
+" Fix copy paste for windows
 let s:clip = '/mnt/c/Windows/System32/clip.exe'  " default location
 if executable(s:clip)
 	augroup WSLYank
@@ -45,3 +57,5 @@ if executable(s:clip)
 		autocmd TextYankPost * call system('echo '.shellescape(join(v:event.regcontents, "\<CR>")).' | '.s:clip)
 	augroup END
 end
+
+
